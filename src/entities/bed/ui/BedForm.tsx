@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
-import { useAddBed } from '../model/useAddBed';
-import { ENGINE_COLORS, type EngineColor } from '../model/types';
+import { useRef, useState } from "react";
+import { useAddBed } from "../model/useAddBed";
+import { ENGINE_COLORS, type EngineColor } from "../model/types";
 
 interface BedFormProps {
   onSaved: () => void;
@@ -8,13 +8,12 @@ interface BedFormProps {
 
 /** Форма добавления кровати: название, номер, двигатель, фото. */
 export function BedForm({ onSaved }: BedFormProps) {
-  const [title, setTitle] = useState('');
-  const [number, setNumber] = useState('');
+  const [title, setTitle] = useState("");
+  const [number, setNumber] = useState("");
   const [engine, setEngine] = useState<EngineColor>(1);
   const [photo, setPhoto] = useState<File | null>(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraRef = useRef<HTMLInputElement>(null);
 
   const { add, saving } = useAddBed(onSaved);
 
@@ -24,27 +23,29 @@ export function BedForm({ onSaved }: BedFormProps) {
   }
 
   async function handleSubmit() {
-    setError('');
+    setError("");
 
     if (!title.trim()) {
-      setError('Укажите название кровати');
+      setError("Укажите название кровати");
       return;
     }
     if (!number.trim()) {
-      setError('Укажите номер кровати');
+      setError("Укажите номер кровати");
       return;
     }
 
     try {
       await add(title.trim(), number.trim(), engine, photo);
-      setTitle('');
-      setNumber('');
+      setTitle("");
+      setNumber("");
       setEngine(1);
       setPhoto(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      if (cameraRef.current) cameraRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err) {
-      setError('Ошибка сохранения: ' + (err instanceof Error ? err.message : String(err)));
+      setError(
+        "Ошибка сохранения: " +
+          (err instanceof Error ? err.message : String(err))
+      );
     }
   }
 
@@ -85,10 +86,10 @@ export function BedForm({ onSaved }: BedFormProps) {
               type="button"
               onClick={() => setEngine(val)}
               className={
-                'rounded-lg px-4 py-2 text-sm font-medium transition ' +
+                "rounded-lg px-4 py-2 text-sm font-medium transition " +
                 (engine === val
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700')
+                  ? "bg-indigo-600 text-white"
+                  : "bg-neutral-800 text-neutral-300 hover:bg-neutral-700")
               }
             >
               {val} — {ENGINE_COLORS[val]}
@@ -106,14 +107,6 @@ export function BedForm({ onSaved }: BedFormProps) {
             accept="image/*"
             onChange={onFileSelected}
             className="flex-1 text-sm text-neutral-400 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-indigo-500"
-          />
-          <input
-            ref={cameraRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={onFileSelected}
-            className="flex-1 text-sm text-neutral-400 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-emerald-500"
           />
         </div>
       </div>
@@ -133,7 +126,7 @@ export function BedForm({ onSaved }: BedFormProps) {
         disabled={saving}
         className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95 disabled:opacity-50"
       >
-        {saving ? 'Сохранение…' : 'Добавить кровать'}
+        {saving ? "Сохранение…" : "Добавить кровать"}
       </button>
     </section>
   );
