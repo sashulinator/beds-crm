@@ -15,6 +15,11 @@ export function Home() {
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
+  function goToClients() {
+    window.history.pushState({}, "", "/clients");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
   function goToDataTransfer() {
     window.history.pushState({}, "", "/data-transfer");
     window.dispatchEvent(new PopStateEvent("popstate"));
@@ -49,6 +54,14 @@ export function Home() {
               className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
             >
               Перейти к списку кроватей →
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={goToClients}
+              className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
+            >
+              Перейти к списку клиентов →
             </button>
           </div>
           <div>

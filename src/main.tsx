@@ -10,6 +10,9 @@ import { EditRentPage } from "./pages/rents/edit";
 import { BedsPage } from "./pages/beds";
 import { AddBedPage } from "./pages/beds/add";
 import { EditBedPage } from "./pages/beds/edit";
+import { ClientsPage } from "./pages/clients";
+import { AddClientPage } from "./pages/clients/add";
+import { EditClientPage } from "./pages/clients/edit";
 import { DataTransferPage } from "./pages/data-transfer";
 
 // Простой SPA-роутинг на основе pathname.
@@ -35,6 +38,13 @@ function render() {
   } else if (path.startsWith("/beds/edit/")) {
     const bedId = path.slice("/beds/edit/".length);
     page = <EditBedPage bedId={bedId} />;
+  } else if (path === "/clients") {
+    page = <ClientsPage />;
+  } else if (path === "/clients/add") {
+    page = <AddClientPage />;
+  } else if (path.startsWith("/clients/edit/")) {
+    const clientId = path.slice("/clients/edit/".length);
+    page = <EditClientPage clientId={clientId} />;
   } else if (path === "/data-transfer") {
     page = <DataTransferPage />;
   } else {

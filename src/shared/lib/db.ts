@@ -3,7 +3,7 @@
 // Версия базы увеличивается при добавлении нового store.
 
 const DB_NAME = 'beds';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 
@@ -23,6 +23,11 @@ export function openDB(): Promise<IDBDatabase> {
 
       if (!db.objectStoreNames.contains('beds')) {
         const store = db.createObjectStore('beds', { keyPath: 'id' });
+        store.createIndex('createdAt', 'createdAt', { unique: false });
+      }
+
+      if (!db.objectStoreNames.contains('clients')) {
+        const store = db.createObjectStore('clients', { keyPath: 'id' });
         store.createIndex('createdAt', 'createdAt', { unique: false });
       }
     };
