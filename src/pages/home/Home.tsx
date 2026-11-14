@@ -1,10 +1,13 @@
 // Страница «Главная»: композиция сущностей.
 // Страница не содержит бизнес-логики — только раскладывает блоки по полочкам.
 
+import { BedForm, BedList, useBedList } from '../../entities/bed';
 import { RentForm, RentList, useRentList } from '../../entities/rent';
 
 export function Home() {
-  const { rents, loading, handleReturn, handleDelete, refresh } = useRentList();
+  const { rents, loading: rentLoading, handleReturn, handleDelete: handleRentDelete, refresh: refreshRents } =
+    useRentList();
+  const { beds, loading: bedLoading, handleDelete: handleBedDelete, refresh: refreshBeds } = useBedList();
 
   return (
     <main className="min-h-screen bg-neutral-950 p-6 text-neutral-100">
@@ -16,8 +19,18 @@ export function Home() {
           </p>
         </header>
 
-        <RentForm onSaved={refresh} />
-        <RentList rents={rents} loading={loading} onReturn={handleReturn} onDelete={handleDelete} />
+        {/* Кровати */}
+        <BedForm onSaved={refreshBeds} />
+        <BedList beds={beds} loading={bedLoading} onDelete={handleBedDelete} />
+
+        {/* Аренда */}
+        <RentForm onSaved={refreshRents} />
+        <RentList
+          rents={rents}
+          loading={rentLoading}
+          onReturn={handleReturn}
+          onDelete={handleRentDelete}
+        />
       </div>
     </main>
   );

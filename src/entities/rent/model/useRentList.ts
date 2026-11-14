@@ -1,7 +1,8 @@
 // Хук «список аренд»: загрузка, возврат, удаление.
 
 import { useCallback, useEffect, useState } from 'react';
-import { deleteRent, getRents, updateRent, type Rent } from './api';
+import { deleteRent, getRents, updateRent } from './api';
+import type { Rent } from './types';
 
 export function useRentList() {
   const [rents, setRents] = useState<Rent[]>([]);

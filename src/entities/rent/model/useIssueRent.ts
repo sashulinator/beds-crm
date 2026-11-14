@@ -1,7 +1,8 @@
 // Хук «выдать в аренду»: конвертирует File[] → Blob[], создаёт Rent и пишет в IndexedDB.
 
 import { useCallback, useState } from 'react';
-import { addRent, type Rent } from './api';
+import { addRent } from './api';
+import type { Rent } from './types';
 
 export function useIssueRent(onSaved: () => void) {
   const [saving, setSaving] = useState(false);
