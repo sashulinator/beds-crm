@@ -36,7 +36,7 @@ export function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
               onClick={() => onReturn(rent.id)}
               className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-medium hover:bg-emerald-600"
             >
-              Вернуть
+              Закрыть аренду
             </button>
           )}
           <button

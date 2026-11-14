@@ -73,7 +73,7 @@ export function RentList({
       {returned.length > 0 && (
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">
-            Свободные{" "}
+            Архив{" "}
             <span className="text-sm text-neutral-500">
               ({returned.length})
             </span>
