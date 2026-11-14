@@ -1,0 +1,1 @@
+export { BedsPage } from './BedsPage';

@@ -4,6 +4,7 @@ import './index.css';
 import { Providers } from './app';
 import { Home } from './pages/home';
 import { RentsPage } from './pages/rents';
+import { BedsPage } from './pages/beds';
 
 // Простой SPA-роутинг на основе pathname.
 let root: Root | null = null;
@@ -14,6 +15,8 @@ function render() {
   let page;
   if (path === '/rents') {
     page = <RentsPage />;
+  } else if (path === '/beds') {
+    page = <BedsPage />;
   } else {
     page = <Home />;
   }
