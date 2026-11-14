@@ -1,6 +1,6 @@
 // Страница «Аренда»: список аренд.
 
-import { RentList, useRentList } from "../../entities/rent";
+import { RentList, useRentList, type Rent } from "../../entities/rent";
 
 export function RentsPage() {
   const {
@@ -22,6 +22,11 @@ export function RentsPage() {
 
   function goToArchive() {
     window.history.pushState({}, "", "/rents/archive");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
+  function handleEdit(rent: Rent) {
+    window.history.pushState({}, "", `/rents/edit/${rent.id}`);
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
@@ -59,6 +64,7 @@ export function RentsPage() {
           loading={rentLoading}
           onReturn={handleReturn}
           onDelete={handleRentDelete}
+          onEdit={handleEdit}
         />
       </div>
     </main>

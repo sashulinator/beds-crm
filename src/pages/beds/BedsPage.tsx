@@ -1,6 +1,6 @@
 // Страница «Кровати»: список.
 
-import { BedList, useBedList } from "../../entities/bed";
+import { BedList, useBedList, type Bed } from "../../entities/bed";
 
 export function BedsPage() {
   const { beds, loading, handleDelete } = useBedList();
@@ -12,6 +12,11 @@ export function BedsPage() {
 
   function goToAddBed() {
     window.history.pushState({}, "", "/beds/add");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
+  function handleEdit(bed: Bed) {
+    window.history.pushState({}, "", `/beds/edit/${bed.id}`);
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
@@ -36,7 +41,12 @@ export function BedsPage() {
           </div>
         </header>
 
-        <BedList beds={beds} loading={loading} onDelete={handleDelete} />
+        <BedList
+          beds={beds}
+          loading={loading}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
       </div>
     </main>
   );

@@ -1,16 +1,21 @@
 import { useRef, useState } from "react";
 import { useIssueRent } from "../model/useIssueRent";
+import { updateRent } from "../model/api";
 import { useBedList } from "../../bed";
 import { ENGINE_COLORS } from "../../bed";
+import type { Rent } from "../model/types";
 
 interface RentFormProps {
   onSaved: () => void;
+  /** Если передана — форма в режиме редактирования. */
+  rent?: Rent;
 }
 
-/** Форма выдачи кровати в аренду: выбор кровати, клиент, фото до выдачи. */
-export function RentForm({ onSaved }: RentFormProps) {
-  const [bedId, setBedId] = useState("");
-  const [clientName, setClientName] = useState("");
+/** Форма выдачи или редактирования аренды. */
+export function RentForm({ onSaved, rent }: RentFormProps) {
+  const isEdit = Boolean(rent);
+  const [bedId, setBedId] = useState(rent?.bedId ?? "");
+  const [clientName, setClientName] = useState(rent?.clientName ?? "");
   const [photos, setPhotos] = useState<File[]>([]);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,7 +40,25 @@ export function RentForm({ onSaved }: RentFormProps) {
     }
 
     try {
-      await issue(bedId, clientName.trim(), photos);
+      if (isEdit && rent) {
+        let photoBlobs = rent.photos;
+        if (photos.length > 0) {
+          photoBlobs = await Promise.all(
+            photos.map((file) =>
+              file.arrayBuffer().then((buf) => new Blob([buf]))
+            )
+          );
+        }
+        await updateRent({
+          ...rent,
+          bedId,
+          clientName: clientName.trim(),
+          photos: photoBlobs,
+        });
+        onSaved();
+      } else {
+        await issue(bedId, clientName.trim(), photos);
+      }
       setBedId("");
       setClientName("");
       setPhotos([]);
@@ -50,7 +73,9 @@ export function RentForm({ onSaved }: RentFormProps) {
 
   return (
     <section className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-5">
-      <h2 className="text-lg font-semibold">Выдать в аренду</h2>
+      <h2 className="text-lg font-semibold">
+        {isEdit ? "Редактировать аренду" : "Выдать в аренду"}
+      </h2>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1">
@@ -115,7 +140,7 @@ export function RentForm({ onSaved }: RentFormProps) {
         disabled={saving}
         className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95 disabled:opacity-50"
       >
-        {saving ? "Сохранение…" : "Выдать в аренду"}
+        {saving ? "Сохранение…" : isEdit ? "Сохранить" : "Выдать в аренду"}
       </button>
     </section>
   );

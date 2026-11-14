@@ -1,16 +1,20 @@
 import { useRef, useState } from "react";
 import { useAddBed } from "../model/useAddBed";
-import { ENGINE_COLORS, type EngineColor } from "../model/types";
+import { addBed } from "../model/api";
+import { ENGINE_COLORS, type Bed, type EngineColor } from "../model/types";
 
 interface BedFormProps {
   onSaved: () => void;
+  /** Если передана — форма в режиме редактирования. */
+  bed?: Bed;
 }
 
-/** Форма добавления кровати: название, номер, двигатель, фото. */
-export function BedForm({ onSaved }: BedFormProps) {
-  const [title, setTitle] = useState("");
-  const [number, setNumber] = useState("");
-  const [engine, setEngine] = useState<EngineColor>(1);
+/** Форма добавления или редактирования кровати. */
+export function BedForm({ onSaved, bed }: BedFormProps) {
+  const isEdit = Boolean(bed);
+  const [title, setTitle] = useState(bed?.title ?? "");
+  const [number, setNumber] = useState(bed?.number ?? "");
+  const [engine, setEngine] = useState<EngineColor>(bed?.engine ?? 1);
   const [photo, setPhoto] = useState<File | null>(null);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,7 +39,23 @@ export function BedForm({ onSaved }: BedFormProps) {
     }
 
     try {
-      await add(title.trim(), number.trim(), engine, photo);
+      if (isEdit && bed) {
+        let photoBlob: Blob | null = bed.photo;
+        if (photo) {
+          const buf = await photo.arrayBuffer();
+          photoBlob = new Blob([buf]);
+        }
+        await addBed({
+          ...bed,
+          title: title.trim(),
+          number: number.trim(),
+          engine,
+          photo: photoBlob,
+        });
+        onSaved();
+      } else {
+        await add(title.trim(), number.trim(), engine, photo);
+      }
       setTitle("");
       setNumber("");
       setEngine(1);
@@ -51,7 +71,9 @@ export function BedForm({ onSaved }: BedFormProps) {
 
   return (
     <section className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-5">
-      <h2 className="text-lg font-semibold">Добавить кровать</h2>
+      <h2 className="text-lg font-semibold">
+        {isEdit ? "Редактировать кровать" : "Добавить кровать"}
+      </h2>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1">
@@ -126,7 +148,7 @@ export function BedForm({ onSaved }: BedFormProps) {
         disabled={saving}
         className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95 disabled:opacity-50"
       >
-        {saving ? "Сохранение…" : "Добавить кровать"}
+        {saving ? "Сохранение…" : isEdit ? "Сохранить" : "Добавить кровать"}
       </button>
     </section>
   );

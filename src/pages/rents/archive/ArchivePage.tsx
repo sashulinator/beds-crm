@@ -1,12 +1,17 @@
 // Страница «Архив аренд»: список закрытых аренд.
 
-import { RentArchiveList, useRentList } from "../../../entities/rent";
+import { RentArchiveList, useRentList, type Rent } from "../../../entities/rent";
 
 export function ArchivePage() {
   const { rents, loading, handleDelete } = useRentList();
 
   function goBack() {
     window.history.pushState({}, "", "/rents");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
+  function handleEdit(rent: Rent) {
+    window.history.pushState({}, "", `/rents/edit/${rent.id}`);
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
@@ -27,6 +32,7 @@ export function ArchivePage() {
           rents={rents}
           loading={loading}
           onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       </div>
     </main>

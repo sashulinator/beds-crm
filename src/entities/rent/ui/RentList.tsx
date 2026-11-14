@@ -10,6 +10,7 @@ interface RentListProps {
   loading: boolean;
   onReturn: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit?: (rent: Rent) => void;
 }
 
 /** Список активных аренд с пагинацией. */
@@ -18,6 +19,7 @@ export function RentList({
   loading,
   onReturn,
   onDelete,
+  onEdit,
 }: RentListProps) {
   const active = rents.filter((r) => r.status === "active");
   const [page, setPage] = useState(1);
@@ -39,6 +41,7 @@ export function RentList({
           rent={rent}
           onReturn={onReturn}
           onDelete={onDelete}
+          onEdit={onEdit}
         />
       ))}
 

@@ -5,10 +5,11 @@ interface RentCardProps {
   rent: Rent;
   onReturn?: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit?: (rent: Rent) => void;
 }
 
 /** Карточка одной аренды: кровать, клиент, дата, фото, действия. */
-export function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
+export function RentCard({ rent, onReturn, onDelete, onEdit }: RentCardProps) {
   const isReturned = rent.status === 'returned';
   const { beds } = useBedList();
   const bed = beds.find((b) => b.id === rent.bedId);
@@ -37,6 +38,14 @@ export function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
               className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-medium hover:bg-emerald-600"
             >
               Закрыть аренду
+            </button>
+          )}
+          {onEdit && (
+            <button
+              onClick={() => onEdit(rent)}
+              className="rounded-lg bg-neutral-700 px-3 py-1.5 text-xs font-medium hover:bg-neutral-600"
+            >
+              Редактировать
             </button>
           )}
           <button

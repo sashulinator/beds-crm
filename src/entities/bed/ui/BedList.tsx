@@ -9,10 +9,11 @@ interface BedListProps {
   beds: Bed[];
   loading: boolean;
   onDelete: (id: string) => void;
+  onEdit?: (bed: Bed) => void;
 }
 
 /** Список кроватей с пагинацией. */
-export function BedList({ beds, loading, onDelete }: BedListProps) {
+export function BedList({ beds, loading, onDelete, onEdit }: BedListProps) {
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(beds.length / PAGE_SIZE);
   const safePage = Math.min(page, Math.max(totalPages, 1));
@@ -27,7 +28,7 @@ export function BedList({ beds, loading, onDelete }: BedListProps) {
       )}
 
       {visible.map((bed) => (
-        <BedCard key={bed.id} bed={bed} onDelete={onDelete} />
+        <BedCard key={bed.id} bed={bed} onDelete={onDelete} onEdit={onEdit} />
       ))}
 
       <Pagination

@@ -1,14 +1,16 @@
-import { StrictMode } from 'react';
-import { createRoot, type Root } from 'react-dom/client';
-import './index.css';
-import { Providers } from './app';
-import { Home } from './pages/home';
-import { RentsPage } from './pages/rents';
-import { AddRentPage } from './pages/rents/add';
-import { ArchivePage } from './pages/rents/archive';
-import { BedsPage } from './pages/beds';
-import { AddBedPage } from './pages/beds/add';
-import { DataTransferPage } from './pages/data-transfer';
+import { StrictMode } from "react";
+import { createRoot, type Root } from "react-dom/client";
+import "./index.css";
+import { Providers } from "./app";
+import { Home } from "./pages/home";
+import { RentsPage } from "./pages/rents";
+import { AddRentPage } from "./pages/rents/add";
+import { ArchivePage } from "./pages/rents/archive";
+import { EditRentPage } from "./pages/rents/edit";
+import { BedsPage } from "./pages/beds";
+import { AddBedPage } from "./pages/beds/add";
+import { EditBedPage } from "./pages/beds/edit";
+import { DataTransferPage } from "./pages/data-transfer";
 
 // Простой SPA-роутинг на основе pathname.
 let root: Root | null = null;
@@ -17,34 +19,40 @@ function render() {
   const path = window.location.pathname;
 
   let page;
-  if (path === '/rents') {
+  if (path === "/rents") {
     page = <RentsPage />;
-  } else if (path === '/rents/add') {
+  } else if (path === "/rents/add") {
     page = <AddRentPage />;
-  } else if (path === '/rents/archive') {
+  } else if (path === "/rents/archive") {
     page = <ArchivePage />;
-  } else if (path === '/beds') {
+  } else if (path.startsWith("/rents/edit/")) {
+    const rentId = path.slice("/rents/edit/".length);
+    page = <EditRentPage rentId={rentId} />;
+  } else if (path === "/beds") {
     page = <BedsPage />;
-  } else if (path === '/beds/add') {
+  } else if (path === "/beds/add") {
     page = <AddBedPage />;
-  } else if (path === '/data-transfer') {
+  } else if (path.startsWith("/beds/edit/")) {
+    const bedId = path.slice("/beds/edit/".length);
+    page = <EditBedPage bedId={bedId} />;
+  } else if (path === "/data-transfer") {
     page = <DataTransferPage />;
   } else {
     page = <Home />;
   }
 
   if (!root) {
-    root = createRoot(document.getElementById('root')!);
+    root = createRoot(document.getElementById("root")!);
   }
 
   root.render(
     <StrictMode>
       <Providers>{page}</Providers>
-    </StrictMode>,
+    </StrictMode>
   );
 }
 
 render();
 
 // Перерисовка при навигации (pushState / popstate).
-window.addEventListener('popstate', render);
+window.addEventListener("popstate", render);

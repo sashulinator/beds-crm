@@ -9,6 +9,7 @@ interface RentArchiveListProps {
   rents: Rent[];
   loading: boolean;
   onDelete: (id: string) => void;
+  onEdit?: (rent: Rent) => void;
 }
 
 /** Список архивных (закрытых) аренд с пагинацией. */
@@ -16,6 +17,7 @@ export function RentArchiveList({
   rents,
   loading,
   onDelete,
+  onEdit,
 }: RentArchiveListProps) {
   const returned = rents.filter((r) => r.status === "returned");
   const [page, setPage] = useState(1);
@@ -32,7 +34,7 @@ export function RentArchiveList({
       )}
 
       {visible.map((rent) => (
-        <RentCard key={rent.id} rent={rent} onDelete={onDelete} />
+        <RentCard key={rent.id} rent={rent} onDelete={onDelete} onEdit={onEdit} />
       ))}
 
       <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
