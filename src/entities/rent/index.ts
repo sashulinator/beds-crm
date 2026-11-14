@@ -7,5 +7,6 @@ export { useIssueRent } from './model/useIssueRent';
 export { useRentList } from './model/useRentList';
 export { RentForm } from './ui/RentForm';
 export { RentList } from './ui/RentList';
+export { RentArchiveList } from './ui/RentArchiveList';
 export { RentCard } from './ui/RentCard';
 export { RentStats } from './ui/RentStats';

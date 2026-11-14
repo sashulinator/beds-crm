@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
-import { useIssueRent } from '../model/useIssueRent';
-import { useBedList } from '../../bed';
-import { ENGINE_COLORS } from '../../bed';
+import { useRef, useState } from "react";
+import { useIssueRent } from "../model/useIssueRent";
+import { useBedList } from "../../bed";
+import { ENGINE_COLORS } from "../../bed";
 
 interface RentFormProps {
   onSaved: () => void;
@@ -9,10 +9,10 @@ interface RentFormProps {
 
 /** Форма выдачи кровати в аренду: выбор кровати, клиент, фото до выдачи. */
 export function RentForm({ onSaved }: RentFormProps) {
-  const [bedId, setBedId] = useState('');
-  const [clientName, setClientName] = useState('');
+  const [bedId, setBedId] = useState("");
+  const [clientName, setClientName] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { beds } = useBedList();
@@ -23,25 +23,28 @@ export function RentForm({ onSaved }: RentFormProps) {
   }
 
   async function handleSubmit() {
-    setError('');
+    setError("");
 
     if (!bedId) {
-      setError('Выберите кровать');
+      setError("Выберите кровать");
       return;
     }
     if (!clientName.trim()) {
-      setError('Укажите имя клиента');
+      setError("Укажите имя клиента");
       return;
     }
 
     try {
       await issue(bedId, clientName.trim(), photos);
-      setBedId('');
-      setClientName('');
+      setBedId("");
+      setClientName("");
       setPhotos([]);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err) {
-      setError('Ошибка сохранения: ' + (err instanceof Error ? err.message : String(err)));
+      setError(
+        "Ошибка сохранения: " +
+          (err instanceof Error ? err.message : String(err))
+      );
     }
   }
 
@@ -112,7 +115,7 @@ export function RentForm({ onSaved }: RentFormProps) {
         disabled={saving}
         className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95 disabled:opacity-50"
       >
-        {saving ? 'Сохранение…' : 'Выдать в аренду'}
+        {saving ? "Сохранение…" : "Выдать в аренду"}
       </button>
     </section>
   );

@@ -5,6 +5,7 @@ import { Providers } from './app';
 import { Home } from './pages/home';
 import { RentsPage } from './pages/rents';
 import { AddRentPage } from './pages/rents/add';
+import { ArchivePage } from './pages/rents/archive';
 import { BedsPage } from './pages/beds';
 import { AddBedPage } from './pages/beds/add';
 import { DataTransferPage } from './pages/data-transfer';
@@ -20,6 +21,8 @@ function render() {
     page = <RentsPage />;
   } else if (path === '/rents/add') {
     page = <AddRentPage />;
+  } else if (path === '/rents/archive') {
+    page = <ArchivePage />;
   } else if (path === '/beds') {
     page = <BedsPage />;
   } else if (path === '/beds/add') {

@@ -20,6 +20,11 @@ export function RentsPage() {
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
+  function goToArchive() {
+    window.history.pushState({}, "", "/rents/archive");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
   return (
     <main className="min-h-screen bg-neutral-950 p-6 text-neutral-100">
       <div className="mx-auto max-w-3xl space-y-8">
@@ -32,12 +37,20 @@ export function RentsPage() {
           </button>
           <div className="mt-2 flex items-center justify-between">
             <h1 className="text-3xl font-bold tracking-tight">Аренды</h1>
-            <button
-              onClick={goToAddRent}
-              className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
-            >
-              + Выдать в аренду
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={goToArchive}
+                className="rounded-lg bg-gray-600 px-5 py-2.5 text-sm font-medium transition hover:bg-gray-500 active:scale-95"
+              >
+                Архив
+              </button>
+              <button
+                onClick={goToAddRent}
+                className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
+              >
+                + Выдать в аренду
+              </button>
+            </div>
           </div>
         </header>
 
