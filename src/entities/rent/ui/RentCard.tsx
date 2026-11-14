@@ -1,5 +1,6 @@
-import type { Rent } from '../model/types';
-import { useBedList, ENGINE_COLORS } from '../../bed';
+import type { Rent } from "../model/types";
+import { useBedList, ENGINE_COLORS } from "../../bed";
+import { useClientList } from "../../client";
 
 interface RentCardProps {
   rent: Rent;
@@ -10,25 +11,40 @@ interface RentCardProps {
 
 /** Карточка одной аренды: кровать, клиент, дата, фото, действия. */
 export function RentCard({ rent, onReturn, onDelete, onEdit }: RentCardProps) {
-  const isReturned = rent.status === 'returned';
+  const isReturned = rent.status === "returned";
   const { beds } = useBedList();
+  const { clients } = useClientList();
   const bed = beds.find((b) => b.id === rent.bedId);
+  const client = rent.clientId
+    ? clients.find((c) => c.id === rent.clientId)
+    : null;
 
   return (
     <article
       className={
-        'space-y-3 rounded-xl border border-neutral-800 p-4 ' +
-        (isReturned ? 'bg-neutral-900/50' : 'bg-neutral-900')
+        "space-y-3 rounded-xl border border-neutral-800 p-4 " +
+        (isReturned ? "bg-neutral-900/50" : "bg-neutral-900")
       }
     >
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 className={'font-medium ' + (isReturned ? 'text-neutral-400' : '')}>
-            {bed ? `${bed.title} (№ ${bed.number})` : 'Кровать удалена'}
+          <h3
+            className={
+              "font-medium " + (isReturned ? "text-neutral-400" : "")
+            }
+          >
+            {bed ? `${bed.title} (№ ${bed.number})` : "Кровать удалена"}
           </h3>
-          <p className={'text-sm ' + (isReturned ? 'text-neutral-500' : 'text-neutral-400')}>
+          <p
+            className={
+              "text-sm " +
+              (isReturned ? "text-neutral-500" : "text-neutral-400")
+            }
+          >
             {bed && `Двигатель: ${ENGINE_COLORS[bed.engine]} · `}
-            Клиент: {rent.clientName} · Выдано: {new Date(rent.issuedAt).toLocaleString('ru-RU')}
+            Клиент: {rent.clientName}
+            {client && ` (${client.phone})`} · Выдано:{" "}
+            {new Date(rent.issuedAt).toLocaleString("ru-RU")}
           </p>
         </div>
         <div className="flex gap-2">

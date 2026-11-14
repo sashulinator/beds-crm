@@ -1,11 +1,13 @@
 // Сущность аренды: выдаём кровать клиенту.
 
-export type RentStatus = 'active' | 'returned';
+export type RentStatus = "active" | "returned";
 
 export interface Rent {
   id: string;
   /** Ссылка на кровать, которую выдаём */
   bedId: string;
+  /** Ссылка на клиента (опционально) */
+  clientId?: string;
   /** Имя клиента, которому выдаём */
   clientName: string;
   /** Дата и время выдачи */

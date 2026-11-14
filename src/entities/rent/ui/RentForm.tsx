@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { useIssueRent } from "../model/useIssueRent";
 import { updateRent } from "../model/api";
-import { useBedList } from "../../bed";
-import { ENGINE_COLORS } from "../../bed";
+import { useBedList, ENGINE_COLORS } from "../../bed";
+import { useClientList } from "../../client";
 import type { Rent } from "../model/types";
 
 interface RentFormProps {
@@ -15,16 +15,26 @@ interface RentFormProps {
 export function RentForm({ onSaved, rent }: RentFormProps) {
   const isEdit = Boolean(rent);
   const [bedId, setBedId] = useState(rent?.bedId ?? "");
+  const [clientId, setClientId] = useState(rent?.clientId ?? "");
   const [clientName, setClientName] = useState(rent?.clientName ?? "");
   const [photos, setPhotos] = useState<File[]>([]);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { beds } = useBedList();
+  const { clients } = useClientList();
   const { issue, saving } = useIssueRent(onSaved);
 
   function onFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
     setPhotos(Array.from(e.target.files ?? []));
+  }
+
+  function onClientSelected(id: string) {
+    setClientId(id);
+    const client = clients.find((c) => c.id === id);
+    if (client) {
+      setClientName(client.name);
+    }
   }
 
   async function handleSubmit() {
@@ -52,14 +62,16 @@ export function RentForm({ onSaved, rent }: RentFormProps) {
         await updateRent({
           ...rent,
           bedId,
+          clientId: clientId || undefined,
           clientName: clientName.trim(),
           photos: photoBlobs,
         });
         onSaved();
       } else {
-        await issue(bedId, clientName.trim(), photos);
+        await issue(bedId, clientName.trim(), photos, clientId || undefined);
       }
       setBedId("");
+      setClientId("");
       setClientName("");
       setPhotos([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -95,16 +107,33 @@ export function RentForm({ onSaved, rent }: RentFormProps) {
         </label>
 
         <label className="space-y-1">
-          <span className="text-sm text-neutral-300">Клиент</span>
-          <input
-            type="text"
-            value={clientName}
-            onChange={(e) => setClientName(e.target.value)}
-            placeholder="Имя клиента"
+          <span className="text-sm text-neutral-300">Клиент из списка</span>
+          <select
+            value={clientId}
+            onChange={(e) => onClientSelected(e.target.value)}
             className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm outline-none focus:border-indigo-500"
-          />
+          >
+            <option value="">— не выбран —</option>
+            {clients.map((client) => (
+              <option key={client.id} value={client.id}>
+                {client.name}
+                {client.phone ? ` (${client.phone})` : ""}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
+
+      <label className="space-y-1">
+        <span className="text-sm text-neutral-300">Имя клиента</span>
+        <input
+          type="text"
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
+          placeholder="Имя клиента"
+          className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+        />
+      </label>
 
       <label className="block space-y-1">
         <span className="text-sm text-neutral-300">
