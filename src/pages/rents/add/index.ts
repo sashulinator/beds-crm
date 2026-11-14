@@ -1,0 +1,1 @@
+export { AddRentPage } from "./AddRentPage";

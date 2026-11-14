@@ -4,6 +4,7 @@ import './index.css';
 import { Providers } from './app';
 import { Home } from './pages/home';
 import { RentsPage } from './pages/rents';
+import { AddRentPage } from './pages/rents/add';
 import { BedsPage } from './pages/beds';
 import { AddBedPage } from './pages/beds/add';
 import { DataTransferPage } from './pages/data-transfer';
@@ -17,6 +18,8 @@ function render() {
   let page;
   if (path === '/rents') {
     page = <RentsPage />;
+  } else if (path === '/rents/add') {
+    page = <AddRentPage />;
   } else if (path === '/beds') {
     page = <BedsPage />;
   } else if (path === '/beds/add') {

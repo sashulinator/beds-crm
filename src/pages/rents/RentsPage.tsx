@@ -1,7 +1,6 @@
-// Страница «Аренда»: формы выдачи и списки.
+// Страница «Аренда»: список аренд.
 
-import { BedList, useBedList } from "../../entities/bed";
-import { RentForm, RentList, useRentList } from "../../entities/rent";
+import { RentList, useRentList } from "../../entities/rent";
 
 export function RentsPage() {
   const {
@@ -9,21 +8,15 @@ export function RentsPage() {
     loading: rentLoading,
     handleReturn,
     handleDelete: handleRentDelete,
-    refresh: refreshRents,
   } = useRentList();
-  const {
-    beds,
-    loading: bedLoading,
-    handleDelete: handleBedDelete,
-  } = useBedList();
 
   function goHome() {
     window.history.pushState({}, "", "/");
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
-  function goToBeds() {
-    window.history.pushState({}, "", "/beds");
+  function goToAddRent() {
+    window.history.pushState({}, "", "/rents/add");
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
@@ -37,20 +30,17 @@ export function RentsPage() {
           >
             ← На главную
           </button>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Аренды</h1>
+          <div className="mt-2 flex items-center justify-between">
+            <h1 className="text-3xl font-bold tracking-tight">Аренды</h1>
+            <button
+              onClick={goToAddRent}
+              className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
+            >
+              + Выдать в аренду
+            </button>
+          </div>
         </header>
 
-        {/* Кровати — только список, без формы добавления */}
-        <section className="space-y-3">
-          <BedList
-            beds={beds}
-            loading={bedLoading}
-            onDelete={handleBedDelete}
-          />
-        </section>
-
-        {/* Аренда */}
-        <RentForm onSaved={refreshRents} />
         <RentList
           rents={rents}
           loading={rentLoading}
