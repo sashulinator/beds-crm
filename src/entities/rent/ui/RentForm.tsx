@@ -1,18 +1,21 @@
 import { useRef, useState } from 'react';
 import { useIssueRent } from '../model/useIssueRent';
+import { useBedList } from '../../bed';
+import { ENGINE_COLORS } from '../../bed';
 
 interface RentFormProps {
   onSaved: () => void;
 }
 
-/** Форма выдачи товара в аренду: название, клиент, фото до выдачи. */
+/** Форма выдачи кровати в аренду: выбор кровати, клиент, фото до выдачи. */
 export function RentForm({ onSaved }: RentFormProps) {
-  const [itemTitle, setItemTitle] = useState('');
+  const [bedId, setBedId] = useState('');
   const [clientName, setClientName] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
   const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { beds } = useBedList();
   const { issue, saving } = useIssueRent(onSaved);
 
   function onFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
@@ -22,8 +25,8 @@ export function RentForm({ onSaved }: RentFormProps) {
   async function handleSubmit() {
     setError('');
 
-    if (!itemTitle.trim()) {
-      setError('Укажите название товара');
+    if (!bedId) {
+      setError('Выберите кровать');
       return;
     }
     if (!clientName.trim()) {
@@ -32,9 +35,8 @@ export function RentForm({ onSaved }: RentFormProps) {
     }
 
     try {
-      await issue(itemTitle.trim(), clientName.trim(), photos);
-      // Сбрасываем форму после успешного сохранения.
-      setItemTitle('');
+      await issue(bedId, clientName.trim(), photos);
+      setBedId('');
       setClientName('');
       setPhotos([]);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -49,14 +51,19 @@ export function RentForm({ onSaved }: RentFormProps) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="space-y-1">
-          <span className="text-sm text-neutral-300">Товар</span>
-          <input
-            type="text"
-            value={itemTitle}
-            onChange={(e) => setItemTitle(e.target.value)}
-            placeholder="Например: Матрас «Ортопедик»"
+          <span className="text-sm text-neutral-300">Кровать</span>
+          <select
+            value={bedId}
+            onChange={(e) => setBedId(e.target.value)}
             className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm outline-none focus:border-indigo-500"
-          />
+          >
+            <option value="">— выберите кровать —</option>
+            {beds.map((bed) => (
+              <option key={bed.id} value={bed.id}>
+                {bed.title} (№ {bed.number}, {ENGINE_COLORS[bed.engine]})
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="space-y-1">
@@ -73,7 +80,7 @@ export function RentForm({ onSaved }: RentFormProps) {
 
       <label className="block space-y-1">
         <span className="text-sm text-neutral-300">
-          Фотографии товара (до выдачи) — можно несколько
+          Фотографии кровати (до выдачи) — можно несколько
         </span>
         <input
           ref={fileInputRef}

@@ -1,4 +1,5 @@
 import type { Rent } from '../model/types';
+import { useBedList, ENGINE_COLORS } from '../../bed';
 
 interface RentCardProps {
   rent: Rent;
@@ -6,9 +7,11 @@ interface RentCardProps {
   onDelete: (id: string) => void;
 }
 
-/** Карточка одной аренды: товар, клиент, дата, фото, действия. */
+/** Карточка одной аренды: кровать, клиент, дата, фото, действия. */
 export function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
   const isReturned = rent.status === 'returned';
+  const { beds } = useBedList();
+  const bed = beds.find((b) => b.id === rent.bedId);
 
   return (
     <article
@@ -20,9 +23,10 @@ export function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h3 className={'font-medium ' + (isReturned ? 'text-neutral-400' : '')}>
-            {rent.itemTitle}
+            {bed ? `${bed.title} (№ ${bed.number})` : 'Кровать удалена'}
           </h3>
           <p className={'text-sm ' + (isReturned ? 'text-neutral-500' : 'text-neutral-400')}>
+            {bed && `Двигатель: ${ENGINE_COLORS[bed.engine]} · `}
             Клиент: {rent.clientName} · Выдано: {new Date(rent.issuedAt).toLocaleString('ru-RU')}
           </p>
         </div>
