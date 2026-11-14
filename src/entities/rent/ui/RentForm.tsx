@@ -1,17 +1,19 @@
 import { useRef, useState } from 'react';
+import { useIssueRent } from '../model/useIssueRent';
 
 interface RentFormProps {
-  onSubmit: (itemTitle: string, clientName: string, photos: File[]) => Promise<void>;
+  onSaved: () => void;
 }
 
 /** Форма выдачи товара в аренду: название, клиент, фото до выдачи. */
-export default function RentForm({ onSubmit }: RentFormProps) {
+export function RentForm({ onSaved }: RentFormProps) {
   const [itemTitle, setItemTitle] = useState('');
   const [clientName, setClientName] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
   const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { issue, saving } = useIssueRent(onSaved);
 
   function onFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
     setPhotos(Array.from(e.target.files ?? []));
@@ -29,9 +31,8 @@ export default function RentForm({ onSubmit }: RentFormProps) {
       return;
     }
 
-    setSaving(true);
     try {
-      await onSubmit(itemTitle.trim(), clientName.trim(), photos);
+      await issue(itemTitle.trim(), clientName.trim(), photos);
       // Сбрасываем форму после успешного сохранения.
       setItemTitle('');
       setClientName('');
@@ -39,8 +40,6 @@ export default function RentForm({ onSubmit }: RentFormProps) {
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (err) {
       setError('Ошибка сохранения: ' + (err instanceof Error ? err.message : String(err)));
-    } finally {
-      setSaving(false);
     }
   }
 

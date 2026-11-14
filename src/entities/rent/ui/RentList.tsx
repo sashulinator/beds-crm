@@ -1,5 +1,5 @@
-import type { Rent } from '../types';
-import RentCard from './RentCard';
+import type { Rent } from '../model/types';
+import { RentCard } from './RentCard';
 
 interface RentListProps {
   rents: Rent[];
@@ -9,7 +9,7 @@ interface RentListProps {
 }
 
 /** Список всех аренд, разделённый на активные и возвращённые. */
-export default function RentList({ rents, loading, onReturn, onDelete }: RentListProps) {
+export function RentList({ rents, loading, onReturn, onDelete }: RentListProps) {
   const active = rents.filter((r) => r.status === 'active');
   const returned = rents.filter((r) => r.status === 'returned');
 

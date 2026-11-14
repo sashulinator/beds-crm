@@ -1,4 +1,4 @@
-import type { Rent } from '../types';
+import type { Rent } from '../model/types';
 
 interface RentCardProps {
   rent: Rent;
@@ -7,7 +7,7 @@ interface RentCardProps {
 }
 
 /** Карточка одной аренды: товар, клиент, дата, фото, действия. */
-export default function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
+export function RentCard({ rent, onReturn, onDelete }: RentCardProps) {
   const isReturned = rent.status === 'returned';
 
   return (
