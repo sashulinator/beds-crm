@@ -23,7 +23,7 @@ export function RentStats({ rents, loading }: RentStatsProps) {
       </div>
 
       <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
-        <p className="text-sm text-neutral-400">Свободные</p>
+        <p className="text-sm text-neutral-400">Свободные кровати</p>
         {loading ? (
           <p className="mt-2 text-3xl font-bold text-neutral-500">…</p>
         ) : (

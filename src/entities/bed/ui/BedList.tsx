@@ -1,5 +1,5 @@
-import type { Bed } from '../model/types';
-import { BedCard } from './BedCard';
+import type { Bed } from "../model/types";
+import { BedCard } from "./BedCard";
 
 interface BedListProps {
   beds: Bed[];
@@ -11,9 +11,7 @@ interface BedListProps {
 export function BedList({ beds, loading, onDelete }: BedListProps) {
   return (
     <section className="space-y-3">
-      <h2 className="text-lg font-semibold">
-        Кровати <span className="text-sm text-neutral-500">({beds.length})</span>
-      </h2>
+      <h2 className="text-lg font-semibold"></h2>
 
       {loading && <p className="text-sm text-neutral-500">Загрузка…</p>}
 

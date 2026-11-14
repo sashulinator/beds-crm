@@ -1,13 +1,13 @@
 // Страница «Кровати»: форма добавления и список.
 
-import { BedForm, BedList, useBedList } from '../../entities/bed';
+import { BedForm, BedList, useBedList } from "../../entities/bed";
 
 export function BedsPage() {
   const { beds, loading, handleDelete, refresh } = useBedList();
 
   function goBack() {
-    window.history.pushState({}, '', '/rents');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.history.pushState({}, "", "/");
+    window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
   return (
@@ -18,7 +18,7 @@ export function BedsPage() {
             onClick={goBack}
             className="text-sm text-neutral-400 transition hover:text-neutral-200"
           >
-            ← К арендам
+            ← На главную
           </button>
           <h1 className="mt-2 text-3xl font-bold tracking-tight">Кровати</h1>
         </header>

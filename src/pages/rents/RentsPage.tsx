@@ -37,25 +37,11 @@ export function RentsPage() {
           >
             ← На главную
           </button>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">
-            Аренда товаров
-          </h1>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">Аренды</h1>
         </header>
 
         {/* Кровати — только список, без формы добавления */}
         <section className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">
-              Кровати{" "}
-              <span className="text-sm text-neutral-500">({beds.length})</span>
-            </h2>
-            <button
-              onClick={goToBeds}
-              className="text-sm text-indigo-400 transition hover:text-indigo-300"
-            >
-              + Добавить
-            </button>
-          </div>
           <BedList
             beds={beds}
             loading={bedLoading}
