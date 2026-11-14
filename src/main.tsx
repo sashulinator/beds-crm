@@ -5,6 +5,7 @@ import { Providers } from './app';
 import { Home } from './pages/home';
 import { RentsPage } from './pages/rents';
 import { BedsPage } from './pages/beds';
+import { AddBedPage } from './pages/beds/add';
 import { DataTransferPage } from './pages/data-transfer';
 
 // Простой SPA-роутинг на основе pathname.
@@ -18,6 +19,8 @@ function render() {
     page = <RentsPage />;
   } else if (path === '/beds') {
     page = <BedsPage />;
+  } else if (path === '/beds/add') {
+    page = <AddBedPage />;
   } else if (path === '/data-transfer') {
     page = <DataTransferPage />;
   } else {

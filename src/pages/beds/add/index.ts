@@ -1,0 +1,1 @@
+export { AddBedPage } from "./AddBedPage";

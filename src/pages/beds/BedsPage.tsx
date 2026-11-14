@@ -1,12 +1,17 @@
-// Страница «Кровати»: форма добавления и список.
+// Страница «Кровати»: список.
 
-import { BedForm, BedList, useBedList } from "../../entities/bed";
+import { BedList, useBedList } from "../../entities/bed";
 
 export function BedsPage() {
-  const { beds, loading, handleDelete, refresh } = useBedList();
+  const { beds, loading, handleDelete } = useBedList();
 
   function goBack() {
     window.history.pushState({}, "", "/");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
+  function goToAddBed() {
+    window.history.pushState({}, "", "/beds/add");
     window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
@@ -20,10 +25,17 @@ export function BedsPage() {
           >
             ← На главную
           </button>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Кровати</h1>
+          <div className="mt-2 flex items-center justify-between">
+            <h1 className="text-3xl font-bold tracking-tight">Кровати</h1>
+            <button
+              onClick={goToAddBed}
+              className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
+            >
+              + Добавить
+            </button>
+          </div>
         </header>
 
-        <BedForm onSaved={refresh} />
         <BedList beds={beds} loading={loading} onDelete={handleDelete} />
       </div>
     </main>
