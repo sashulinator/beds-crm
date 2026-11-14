@@ -1,13 +1,35 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Root } from 'react-dom/client';
 import './index.css';
 import { Providers } from './app';
 import { Home } from './pages/home';
+import { RentsPage } from './pages/rents';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Providers>
-      <Home />
-    </Providers>
-  </StrictMode>,
-);
+// Простой SPA-роутинг на основе pathname.
+let root: Root | null = null;
+
+function render() {
+  const path = window.location.pathname;
+
+  let page;
+  if (path === '/rents') {
+    page = <RentsPage />;
+  } else {
+    page = <Home />;
+  }
+
+  if (!root) {
+    root = createRoot(document.getElementById('root')!);
+  }
+
+  root.render(
+    <StrictMode>
+      <Providers>{page}</Providers>
+    </StrictMode>,
+  );
+}
+
+render();
+
+// Перерисовка при навигации (pushState / popstate).
+window.addEventListener('popstate', render);

@@ -1,13 +1,14 @@
-// Страница «Главная»: композиция сущностей.
-// Страница не содержит бизнес-логики — только раскладывает блоки по полочкам.
+// Страница «Главная»: карточка со статистикой аренд и ссылка на список.
 
-import { BedForm, BedList, useBedList } from '../../entities/bed';
-import { RentForm, RentList, useRentList } from '../../entities/rent';
+import { RentStats, useRentList } from '../../entities/rent';
 
 export function Home() {
-  const { rents, loading: rentLoading, handleReturn, handleDelete: handleRentDelete, refresh: refreshRents } =
-    useRentList();
-  const { beds, loading: bedLoading, handleDelete: handleBedDelete, refresh: refreshBeds } = useBedList();
+  const { rents, loading } = useRentList();
+
+  function goToRents() {
+    window.history.pushState({}, '', '/rents');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }
 
   return (
     <main className="min-h-screen bg-neutral-950 p-6 text-neutral-100">
@@ -15,22 +16,20 @@ export function Home() {
         <header>
           <h1 className="text-3xl font-bold tracking-tight">Аренда товаров</h1>
           <p className="mt-1 text-sm text-neutral-400">
-            Данные хранятся локально в IndexedDB браузера. Фотографии товара снимаются перед выдачей.
+            Данные хранятся локально в IndexedDB браузера.
           </p>
         </header>
 
-        {/* Кровати */}
-        <BedForm onSaved={refreshBeds} />
-        <BedList beds={beds} loading={bedLoading} onDelete={handleBedDelete} />
+        {/* Карточка с количеством аренд */}
+        <RentStats rents={rents} loading={loading} />
 
-        {/* Аренда */}
-        <RentForm onSaved={refreshRents} />
-        <RentList
-          rents={rents}
-          loading={rentLoading}
-          onReturn={handleReturn}
-          onDelete={handleRentDelete}
-        />
+        {/* Ссылка на список */}
+        <button
+          onClick={goToRents}
+          className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
+        >
+          Перейти к списку аренд →
+        </button>
       </div>
     </main>
   );

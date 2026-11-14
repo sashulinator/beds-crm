@@ -8,3 +8,4 @@ export { useRentList } from './model/useRentList';
 export { RentForm } from './ui/RentForm';
 export { RentList } from './ui/RentList';
 export { RentCard } from './ui/RentCard';
+export { RentStats } from './ui/RentStats';
