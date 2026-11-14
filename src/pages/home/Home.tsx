@@ -1,13 +1,18 @@
 // Страница «Главная»: карточка со статистикой аренд и ссылка на список.
 
-import { RentStats, useRentList } from '../../entities/rent';
+import { RentStats, useRentList } from "../../entities/rent";
 
 export function Home() {
   const { rents, loading } = useRentList();
 
   function goToRents() {
-    window.history.pushState({}, '', '/rents');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.history.pushState({}, "", "/rents");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }
+
+  function goToDataTransfer() {
+    window.history.pushState({}, "", "/data-transfer");
+    window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
   return (
@@ -23,13 +28,25 @@ export function Home() {
         {/* Карточка с количеством аренд */}
         <RentStats rents={rents} loading={loading} />
 
-        {/* Ссылка на список */}
-        <button
-          onClick={goToRents}
-          className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
-        >
-          Перейти к списку аренд →
-        </button>
+        {/* Ссылки построчно */}
+        <div className="flex flex-col gap-3">
+          <div>
+            <button
+              onClick={goToRents}
+              className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium transition hover:bg-indigo-500 active:scale-95"
+            >
+              Перейти к списку аренд →
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={goToDataTransfer}
+              className="rounded-lg bg-neutral-700 px-5 py-2.5 text-sm font-medium transition hover:bg-neutral-600 active:scale-95"
+            >
+              Экспорт / Импорт данных →
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );

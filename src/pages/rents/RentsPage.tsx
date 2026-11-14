@@ -1,22 +1,30 @@
 // Страница «Аренда»: формы выдачи и списки.
 
-import { BedList, useBedList } from '../../entities/bed';
-import { RentForm, RentList, useRentList } from '../../entities/rent';
-import { DataTransferPanel } from '../../features/data-transfer';
+import { BedList, useBedList } from "../../entities/bed";
+import { RentForm, RentList, useRentList } from "../../entities/rent";
 
 export function RentsPage() {
-  const { rents, loading: rentLoading, handleReturn, handleDelete: handleRentDelete, refresh: refreshRents } =
-    useRentList();
-  const { beds, loading: bedLoading, handleDelete: handleBedDelete, refresh: refreshBeds } = useBedList();
+  const {
+    rents,
+    loading: rentLoading,
+    handleReturn,
+    handleDelete: handleRentDelete,
+    refresh: refreshRents,
+  } = useRentList();
+  const {
+    beds,
+    loading: bedLoading,
+    handleDelete: handleBedDelete,
+  } = useBedList();
 
   function goHome() {
-    window.history.pushState({}, '', '/');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.history.pushState({}, "", "/");
+    window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
   function goToBeds() {
-    window.history.pushState({}, '', '/beds');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.history.pushState({}, "", "/beds");
+    window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
   return (
@@ -29,14 +37,17 @@ export function RentsPage() {
           >
             ← На главную
           </button>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Аренда товаров</h1>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">
+            Аренда товаров
+          </h1>
         </header>
 
         {/* Кровати — только список, без формы добавления */}
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">
-              Кровати <span className="text-sm text-neutral-500">({beds.length})</span>
+              Кровати{" "}
+              <span className="text-sm text-neutral-500">({beds.length})</span>
             </h2>
             <button
               onClick={goToBeds}
@@ -45,7 +56,11 @@ export function RentsPage() {
               + Добавить
             </button>
           </div>
-          <BedList beds={beds} loading={bedLoading} onDelete={handleBedDelete} />
+          <BedList
+            beds={beds}
+            loading={bedLoading}
+            onDelete={handleBedDelete}
+          />
         </section>
 
         {/* Аренда */}
@@ -55,14 +70,6 @@ export function RentsPage() {
           loading={rentLoading}
           onReturn={handleReturn}
           onDelete={handleRentDelete}
-        />
-
-        {/* Экспорт / Импорт */}
-        <DataTransferPanel
-          onImported={() => {
-            void refreshBeds();
-            void refreshRents();
-          }}
         />
       </div>
     </main>
